@@ -2764,15 +2764,21 @@ ptp_ocp_art_sma_init(struct ptp_ocp *bp)
 	int i;
 
 	/* defaults */
-	bp->sma[0].mode = SMA_MODE_IN;
-	bp->sma[1].mode = SMA_MODE_IN;
+	bp->sma[0].mode = SMA_MODE_OUT;
+	bp->sma[1].mode = SMA_MODE_OUT;
 	bp->sma[2].mode = SMA_MODE_OUT;
 	bp->sma[3].mode = SMA_MODE_OUT;
 
-	bp->sma[0].default_fcn = 0x08;	/* IN: 10Mhz */
-	bp->sma[1].default_fcn = 0x01;	/* IN: PPS1 */
-	bp->sma[2].default_fcn = 0x10;	/* OUT: 10Mhz */
-	bp->sma[3].default_fcn = 0x02;	/* OUT: PHC */
+	bp->sma[0].default_fcn = 0x10;	/* OUT: 10Mhz */
+	bp->sma[1].default_fcn = 0x02;	/* OUT: PHC */
+	bp->sma[2].default_fcn = 0x02;	/* OUT: PHC */
+	bp->sma[3].default_fcn = 0x04;	/* OUT: GNSS */
+
+	iowrite32(0x10, &bp->art_sma->map[0].gpio);
+	iowrite32(0x2, &bp->art_sma->map[1].gpio);
+	iowrite32(0x2, &bp->art_sma->map[2].gpio);
+	iowrite32(0x4, &bp->art_sma->map[3].gpio);
+
 
 	/* If no SMA map, the pin functions and directions are fixed. */
 	if (!bp->art_sma) {
